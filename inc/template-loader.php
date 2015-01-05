@@ -19,14 +19,14 @@ function uf_template_include( $template ) {
 	if ( get_query_var( 'uf' ) == 'user-action' )
 		return;
 
-	$user_template = get_query_template( get_query_var( 'uf' ) );
+	$user_template = get_template_directory() . '/user-frontend/' . get_query_var( 'uf' ) . '.php';
 	$new_template = plugin_dir_path( __FILE__ ) . '../templates/' . get_query_var( 'uf' ) . '.php';
 	$is_uf = FALSE;
 
-	if ( $user_template ){
+	if ( file_exists( $user_template ) ) {
 		$is_uf     = TRUE;
 		$template   = $user_template;
-	} else if ( file_exists( $new_template ) ){
+	} else if ( file_exists( $new_template ) ) {
 		$is_uf     = TRUE;
 		$template   = $new_template;
 	}
@@ -51,13 +51,14 @@ function uf_template_include( $template ) {
 function uf_generate_rewrite_rules( $wp_rewrite ) {
 
 	$rules = array(
-		'user-action'								=> 'index.php?uf=user-action',
-		'user-login'								=> 'index.php?uf=user-login',
-		'user-profile'								=> 'index.php?uf=user-profile',
-		'user-register'								=> 'index.php?uf=user-register',
-		'user-reset-password'						=> 'index.php?uf=user-reset-password',
-		'user-forgot-password'						=> 'index.php?uf=user-forgot-password',
-		'user-activation/?([A-Za-z0-9-_.,]+)?'		=> 'index.php?uf=user-activation&key=$matches[1]',
+		'user-action'                          => 'index.php?uf=user-action',
+		'user-error'                           => 'index.php?uf=user-error',
+		'user-login'                           => 'index.php?uf=user-login',
+		'user-profile'                         => 'index.php?uf=user-profile',
+		'user-register'                        => 'index.php?uf=user-register',
+		'user-reset-password'                  => 'index.php?uf=user-reset-password',
+		'user-forgot-password'                 => 'index.php?uf=user-forgot-password',
+		'user-activation/?([A-Za-z0-9-_.,]+)?' => 'index.php?uf=user-activation&key=$matches[1]',
 	);
 
 	$wp_rewrite->rules = $rules + $wp_rewrite->rules;
